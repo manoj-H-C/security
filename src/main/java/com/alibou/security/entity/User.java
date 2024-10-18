@@ -1,5 +1,6 @@
-package com.alibou.security.user;
+package com.alibou.security.entity;
 
+import com.alibou.security.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
