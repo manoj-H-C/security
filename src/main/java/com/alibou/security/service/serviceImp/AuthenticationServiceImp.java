@@ -4,9 +4,12 @@ import com.alibou.security.config.JwtService;
 import com.alibou.security.dto.AuthenticationRequest;
 import com.alibou.security.dto.AuthenticationResponse;
 import com.alibou.security.dto.RegisterRequest;
+import com.alibou.security.entity.Token;
+import com.alibou.security.enums.TokenType;
 import com.alibou.security.exception.ApiException;
 import com.alibou.security.exception.ResourceNotFoundException;
 import com.alibou.security.exception.UserNotFoundException;
+import com.alibou.security.repository.TokenRepository;
 import com.alibou.security.repository.UserRepository;
 import com.alibou.security.service.AuthenticationService;
 import com.alibou.security.enums.Role;
@@ -28,6 +31,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final TokenRepository tokenRepository;
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
@@ -41,8 +45,9 @@ public class AuthenticationServiceImp implements AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
+        var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -66,8 +71,39 @@ public class AuthenticationServiceImp implements AuthenticationService {
                 .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
 
         var jwtToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
+
+    //saving token whenever user registers or logs inS
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .tokenType(TokenType.BEARER)
+                .revoked(false)
+                .expired(false)
+                .build();
+        tokenRepository.save(token);
+    }
+
+/*due to the above method i can create n number of tokens that are active which is not good
+i want a maximum of one token to be active at a given instance
+for that i wrote the below method
+*/
+    private void revokeAllUserTokens(User user){
+        var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+        if(validUserTokens.isEmpty()){
+            return;
+        }
+        validUserTokens.forEach(t->{
+            t.setExpired(true);
+            t.setRevoked(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+
 }
