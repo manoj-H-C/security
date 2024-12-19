@@ -1,6 +1,6 @@
-package com.axisbank.builder.authentication.RequestResonseEncryption;
+package com.alibou.security.RequestResonseEncryption;
 
-import com.axisbank.builder.common.Constants.CommonConstants;
+import com.alibou.security.constants.CommonConstants;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.WriteListener;
 import jakarta.servlet.http.HttpServletResponse;

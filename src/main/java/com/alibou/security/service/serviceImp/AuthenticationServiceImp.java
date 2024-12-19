@@ -7,12 +7,10 @@ import com.alibou.security.dto.RegisterRequest;
 import com.alibou.security.entity.Token;
 import com.alibou.security.enums.TokenType;
 import com.alibou.security.exception.ApiException;
-import com.alibou.security.exception.ResourceNotFoundException;
 import com.alibou.security.exception.UserNotFoundException;
 import com.alibou.security.repository.TokenRepository;
 import com.alibou.security.repository.UserRepository;
 import com.alibou.security.service.AuthenticationService;
-import com.alibou.security.enums.Role;
 import com.alibou.security.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +22,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -86,10 +81,11 @@ public class AuthenticationServiceImp implements AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
+        AuthenticationResponse authenticationResponse= AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+        return authenticationResponse;
     }
 
     @Override

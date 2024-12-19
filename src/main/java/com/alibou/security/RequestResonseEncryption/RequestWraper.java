@@ -1,6 +1,6 @@
-package com.axisbank.builder.authentication.RequestResonseEncryption;
+package com.alibou.security.RequestResonseEncryption;
 
-import com.axisbank.builder.common.Constants.CommonConstants;
+import com.alibou.security.constants.CommonConstants;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,6 +17,8 @@ import java.util.stream.Collectors;
 // @Component
 public class RequestWraper extends HttpServletRequestWrapper {
   static Logger logger = LoggerFactory.getLogger(RequestWraper.class);
+  @Autowired
+  private  CommonConstants constants;
   private final String body;
   private final boolean DEBUG_FLAGE;
   private final boolean INITIAL_REQUEST;

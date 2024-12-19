@@ -1,4 +1,4 @@
-package com.axisbank.builder.authentication.RequestResonseEncryption;
+package com.alibou.security.RequestResonseEncryption;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

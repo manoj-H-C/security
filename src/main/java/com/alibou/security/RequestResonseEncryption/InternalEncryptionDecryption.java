@@ -1,4 +1,4 @@
-package com.axisbank.builder.authentication.RequestResonseEncryption;
+package com.alibou.security.RequestResonseEncryption;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,8 +98,8 @@ public class InternalEncryptionDecryption {
         try {
             // Sample data to encrypt
             String data = "{\n" +
-                    "  \"email\": \"manojhc112@gmail.com\",\n" +
-                    "  \"password\": \"manoj\"\n" +
+                    "  \"email\": \"admin@mail.com\",\n" +
+                    "  \"password\": \"password\"\n" +
                     "}";
             // decrypt the data
             String decrypt = "uLJkeTWGIkjZyZTlHUpoyN/wd6J7Pkgfg61C7sSgS56H4H1wbnS42r1TEkhQEKKWKxwao1EXSIl1o0eygemuk1wTsYsbSVh1964KpUuwoA2248CTYxyxdCVdBHl7rBlJ2WnZ0JNFvV3zFYyJy89OAGgHDqGsSF3Z2VopV8CfebA=";

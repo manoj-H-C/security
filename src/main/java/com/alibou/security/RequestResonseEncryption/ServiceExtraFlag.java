@@ -1,4 +1,4 @@
-package com.axisbank.builder.authentication.RequestResonseEncryption;
+package com.alibou.security.RequestResonseEncryption;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Table(name = "EXTERNAL_SERVICE_STATUS")
 public class ServiceExtraFlag implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
   @Column(name = "SERVICE_NAME")

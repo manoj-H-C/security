@@ -1,4 +1,4 @@
-package com.axisbank.builder.authentication.RequestResonseEncryption;
+package com.alibou.security.RequestResonseEncryption;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
