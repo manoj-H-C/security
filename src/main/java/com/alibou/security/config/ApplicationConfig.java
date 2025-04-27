@@ -45,12 +45,12 @@ public class ApplicationConfig implements BeanPostProcessor {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof AuthorizationFilter authorizationFilter) {
-            authorizationFilter.setFilterErrorDispatch(false);
-        }
-        return bean;
-    }
+//    @Override
+//    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+//        if (bean instanceof AuthorizationFilter authorizationFilter) {
+//            authorizationFilter.setFilterErrorDispatch(false);
+//        }
+//        return bean;
+//    }
 
 }

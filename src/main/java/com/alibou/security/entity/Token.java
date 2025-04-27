@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 //@Table(name = "")
 public class Token {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String token;
     @Enumerated(EnumType.STRING)

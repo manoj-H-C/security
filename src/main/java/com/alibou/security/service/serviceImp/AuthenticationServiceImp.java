@@ -5,6 +5,7 @@ import com.alibou.security.dto.AuthenticationRequest;
 import com.alibou.security.dto.AuthenticationResponse;
 import com.alibou.security.dto.RegisterRequest;
 import com.alibou.security.entity.Token;
+import com.alibou.security.enums.Role;
 import com.alibou.security.enums.TokenType;
 import com.alibou.security.exception.ApiException;
 import com.alibou.security.exception.UserNotFoundException;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -42,13 +45,14 @@ public class AuthenticationServiceImp implements AuthenticationService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new ApiException(HttpStatus.BAD_REQUEST,"Email is already in use"); // Custom exception
         }
+        var role = ObjectUtils.isEmpty(request.getRole()) ? Role.USER : request.getRole();
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 //.role(Role.USER)
-                .role(request.getRole())
+                .role(role)
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -80,6 +84,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
+        cleanUpRevokedTokens();
         saveUserToken(user, jwtToken);
         AuthenticationResponse authenticationResponse= AuthenticationResponse.builder()
                 .accessToken(jwtToken)
@@ -143,6 +148,11 @@ for that i wrote the below method
             t.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
+    }
+
+    @Transactional
+    public void cleanUpRevokedTokens() {
+        tokenRepository.deleteAllRevokedTokens();
     }
 
 }

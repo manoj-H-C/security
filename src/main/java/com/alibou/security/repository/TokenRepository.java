@@ -2,7 +2,9 @@ package com.alibou.security.repository;
 
 import com.alibou.security.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +14,10 @@ public interface TokenRepository extends JpaRepository<Token, Integer> {
     List<Token> findAllValidTokensByUser(Integer userId);
 
     Optional<Token> findByToken(String token);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Token t WHERE t.revoked = true or t.expired = true")
+    void deleteAllRevokedTokens();
+
 }
