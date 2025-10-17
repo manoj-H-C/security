@@ -59,8 +59,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
+                .message("User registered successfully!")
                 .build();
     }
 
@@ -89,6 +88,7 @@ public class AuthenticationServiceImp implements AuthenticationService {
         AuthenticationResponse authenticationResponse= AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .message("Login successful. Great to see you!")
                 .build();
         return authenticationResponse;
     }
