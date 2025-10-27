@@ -1,0 +1,107 @@
+to build docker image
+docker build -t springboot-docker-demo .
+
+to check list of docker images
+docker images
+
+to add tage to docker image and build it
+docker build -t springboot-docker-demo:0.1.RELEASE .
+
+to remove docker images
+docker rmi image_id
+
+to run a container with local tag
+docker run -p 8080:8080 springboot-docker-demo
+
+to run a container with a custom tag
+docker run -p 8081:8080 springboot-docker-demo:0.1.RELEASE
+http://localhost:8080/docker ==> to hit the api
+
+to run docker container in detached mode
+docker run -d -p 8080:8080 springboot-docker-demo:0.1.RELEASE
+
+to see active containers
+docker ps
+
+for logs of a container
+docker logs -f container_id
+
+for stopping container
+docker stop container_id
+
+pushing docker image to docker hub
+docker login
+docker tag springboot-docker-demo:0.1.RELEASE manojhc18/springboot-docker-demo:0.1.RELEASE
+docker images
+docker push manojhc18/springboot-docker-demo:0.1.RELEASE
+
+to pull the pushed docker image
+docker pull manojhc18/springboot-docker-demo:0.1.RELEASE
+
+for mysql image
+docker pull mysql:latest
+
+creating a new network
+docker network create springboot-mysql-net
+
+to create a new docker container for mysql in a container network
+docker run --name mysqldb --network springboot-mysql-net -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=employeedb -d mysql
+
+docker exec -it container_id bash
+
+inside bash
+mysql -u root -p
+
+check active containers
+docker ps
+
+
+if u can't find db container use
+docker ps -a
+
+then start that container
+docker start d625cc90377c
+
+to run the application in a specific docker netword in detached mode
+docker run --network springboot-mysql-net --name springboot-mysql-container -p 8080:8080 -d spring-restful-webservices
+
+to start docker compose in detached mode
+docker-compose up -d
+
+to stop docker compose
+docker compose down
+
+
+for all docker compose commands
+docker compose ls
+docker compose ps
+docker compose config
+docker inspect mysqldb
+
+
+for this project============================================================================
+
+
+List all volumes
+docker volume ls
+
+Identify unused volumes
+docker volume ls -f dangling=true
+
+Remove unused volumes
+docker volume prune
+
+Remove all volumes (if you want a clean slate)
+docker compose down -v
+
+for accessing mongo db
+docker exec -it mongo_db mongo -u manoj -p manoj --authenticationDatabase admin
+
+for accessing postgresql
+docker exec -it ms_pg_sql psql -U manoj
+
+
+to build docker compose first time
+docker compose up --build
+docker compose up -d --build
+
