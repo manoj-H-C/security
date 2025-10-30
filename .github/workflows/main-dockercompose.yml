@@ -35,6 +35,8 @@ jobs:
           docker ps -a
           echo "==== Logs from Spring Boot container ===="
           docker logs security || true
+          echo "==== Logs from MySQL container ===="
+          docker logs mysqldb || true
         env:
           SPRING_PROFILES_ACTIVE: docker
 
