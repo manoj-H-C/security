@@ -1,0 +1,26 @@
+**Real-World Example:**
+
+**GitHub Actions** (Your current flow):
+```
+Developer pushes code
+    ↓
+GitHub Actions automatically:
+  - Runs tests with MySQL
+  - Builds Docker image
+  - Pushes to Docker Hub
+    ↓
+You deploy from Docker Hub
+```
+
+**Jenkins** (Would be):
+```
+Developer pushes code
+    ↓
+Webhook triggers Jenkins
+    ↓
+Jenkins (on your server):
+  - Runs tests with MySQL
+  - Builds Docker image
+  - Pushes to Docker Hub
+    ↓
+You deploy from Docker Hub
