@@ -124,7 +124,7 @@ Both systems:
 
 #### GitHub Actions
 ```yaml
-# .github/workflows/main.yml
+# .github/workflows/main123-real.yml
 name: Build & Deploy
 on:
   push:
