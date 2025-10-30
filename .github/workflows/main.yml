@@ -9,6 +9,21 @@ jobs:
   build-deploy:
     name: Build & Deploy Spring App for ci/cd testing
     runs-on: ubuntu-latest
+#    for jdbc exception while running test cases
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: ali-security
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
@@ -18,10 +33,25 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: 17
+# jdbc exception fix for test cases
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h 127.0.0.1 -P 3306 --silent; do
+            echo 'waiting for mysql...'
+            sleep 2
+          done
+          
+          
 
-#      - name: Unit Tests
-#        run: mvn -B test --file pom.xml
+      - name: Unit Tests
+        run: mvn -B test --file pom.xml
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/ali-security
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
 
+# i am already running tests above with jdbc link so skipping tests below
       - name: Build the application
         run: mvn -B clean package -DskipTests
 #        run: |
