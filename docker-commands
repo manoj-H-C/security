@@ -45,7 +45,7 @@ creating a new network
 docker network create springboot-mysql-net
 
 to create a new docker container for mysql in a container network
-docker run --name mysqldb --network springboot-mysql-net -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=employeedb -d mysql
+docker run --name mysqldb --network springboot-mysql-net -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ali-security -d mysql
 
 docker exec -it container_id bash
 
@@ -104,4 +104,8 @@ docker exec -it ms_pg_sql psql -U manoj
 to build docker compose first time
 docker compose up --build
 docker compose up -d --build
+
+
+to run db as stand alone
+docker run -d --name mysqldb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=ali-security -v mysql-data:/var/lib/mysql --network springboot-mysql-net mysql:8.0
 

@@ -1,29 +1,44 @@
-version: "3.8"
-
 services:
-  mysqldb:
-    container_name: mysqldb
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ali-security
-    networks:
-      springboot-mysql-net:
+#  mysqldb:
+#    container_name: mysqldb
+#    image: mysql:8.0
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: ali-security
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - mysql-data:/var/lib/mysql
+#    healthcheck:
+#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    networks:
+#      springboot-mysql-net:
 
   security:
     container_name: security
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: manojhc18/security-project:latest  # Pull from Docker Hub
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/ali-security
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
     ports:
       - "8080:8080"
-    depends_on:
-      - mysqldb
+#    depends_on:
+#      mysqldb:
+#        condition: service_healthy
     networks:
       springboot-mysql-net:
     restart: on-failure
 
+#networks:
+#  springboot-mysql-net:
+#    driver: bridge
 networks:
   springboot-mysql-net:
+    external: true
+volumes:
+  mysql-data:
