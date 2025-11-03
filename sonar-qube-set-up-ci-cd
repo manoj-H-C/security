@@ -1,0 +1,12 @@
+Using SonarCloud (Hosted SonarQube by SonarSource — easiest)
+
+If you want a free and fast setup, SonarCloud is the best choice.
+
+1. Create a SonarCloud Account
+
+Go to https://sonarcloud.io
+
+Sign in with your GitHub account
+
+Import your GitHub repository into SonarCloud.
+
