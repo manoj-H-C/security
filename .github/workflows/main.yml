@@ -63,7 +63,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}     # Your SonarCloud token (you’ll create this)
         run: |
           mvn -B verify sonar:sonar \
-            -Dsonar.projectKey=mhc \
+            -Dsonar.projectKey=security \
             -Dsonar.organization=MHC \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.projectVersion=${{ github.run_number }}
